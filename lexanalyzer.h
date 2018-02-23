@@ -115,4 +115,3 @@ public:
 	Ident & operator[] (int k);
 	int put(const char * buf);
 };
-

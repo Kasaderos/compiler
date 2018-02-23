@@ -4,6 +4,8 @@
 #include <string.h>
 using namespace std;
 
+Table_ident TID(100);
+
 char * Scanner::TW[] =
 {
 	"",
