@@ -444,12 +444,16 @@ int main(void){
 		/* Печатает два числа
 			номер типа лексемы в enum type_of_lex и номер в таблице слов
 		*/
-	int n = TID.get_top();
+	
+	
+	
+	
+	/*int n = TID.get_top();
 	for (int i = 0; i < n; i++){
 		Ident t = TID[i];
 		cout << t.get_value() << ' ';
 	}
-	cout << endl;
+	cout << endl;*/
     return 0;
 }
 
