@@ -1,5 +1,9 @@
-program p;
-var a : int;
+program myprogram;
+var varuable, i : int;
 begin
-	a := 1;
+	i := 1
+	varuable := 5;
+	while (i < varuable) do 
+		i := i + 1;
+	write(i)
 end

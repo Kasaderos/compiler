@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "lexanalyzer.h"
-using namespace std;
 
+using namespace std;
 
 enum type_of_lex {
 	LEX_NULL,
@@ -68,10 +67,10 @@ public:
 class Scanner
 {
 	enum				 state { H, IDENT, NUMB, COM, ALE, DELIM, NEQ };
-	static char			 *TW[];
 	static type_of_lex words[];
-	static char			 *TD[];
 	static type_of_lex  dlms[];
+	static const char			 *TW[];
+	static const char			 *TD[];
 	state					CS;
 	FILE			       *fp; // изменено FILE *fp;
 	char					 c;
@@ -79,11 +78,12 @@ class Scanner
 	int				   buf_top;
 	void clear();
 	void add();
-	int look(const char *buf, char **list);
+	int look(const char *buf, const char **list);
 	void getchar(); // изменено void gc();
 public:
 	Scanner(const char *filename);
 	Lex get_lex();
+
 	char curChar();
 };
 
@@ -123,12 +123,38 @@ public:
 	int get_top() { return top; }
 };
 
+Table_ident TID(100);
 
-char * Scanner::TW[] =
+int main(void){
+    Scanner scan("file.txt");
+    while (1){
+		try {
+			cout << scan.get_lex() << endl;
+		} catch (char c){
+			if (c != '!')
+				cout << "success" << endl;
+			break;
+		}
+	}
+		/* Печатает два числа
+			номер типа лексемы в enum type_of_lex и номер в таблице слов
+		*/
+	int n = TID.get_top();
+	for (int i = 0; i < n; i++){
+		cout << "type name= " << TID[i].get_type() << ' ';
+		cout << "value name= " << TID[i].get_name() << ' ';
+		cout << "value= " << TID[i].get_value() << endl;
+	}
+    return 0;
+}
+
+
+const char * Scanner::TW[] =
 {
 	"",
 	"and",
 	"begin",
+	"write",
 	"bool",
 	"do",
 	"else",
@@ -144,11 +170,10 @@ char * Scanner::TW[] =
 	"true",
 	"var",
 	"while",
-	"write",
 	NULL
 };
 
-char * Scanner::TD[] =
+const char * Scanner::TD[] =
 {
 	"",
 	"@",
@@ -231,7 +256,7 @@ void Scanner::add() {
 	buf[buf_top++] = c;
 }
 
-int Scanner::look(const char *buf, char **list) {
+int Scanner::look(const char *buf, const char **list) {
 	int i = 0;
 	while (list[i]) {
 		if (!strcmp(buf, list[i]))
@@ -257,11 +282,6 @@ ostream & operator << (ostream & s, Lex l) {
 	s << '(' << l.t_lex << ',' << l.v_lex << ')';
 	return s;
 }
-
-/*Lex::Lex(type_of_lex t = LEX_NULL, int v = 0) { 
-    t_lex = t; 
-    v_lex = v;
-}*/
 
 type_of_lex Lex::get_type() { return t_lex; }
 
@@ -305,14 +325,14 @@ int Table_ident::put(const char * buf) {
 
 Table_ident::Table_ident(int max_size) {
 	p = new Ident[size = max_size];
-	top = 1;
+	top = 0;
 }
 
 Table_ident::~Table_ident() {
 	delete[]p;
 }
 
-Table_ident TID(100);
+
 
 Lex Scanner::get_lex() {
 	int d, j;
@@ -320,7 +340,6 @@ Lex Scanner::get_lex() {
 	do {
 		switch (CS) {
 		case H:
-			//cout << 'H' << endl;
 			if (c == ' ' || c == '\n' || c == '\r' || c == '\t')
 				getchar();
 			else if (isalpha(c)) {
@@ -356,7 +375,6 @@ Lex Scanner::get_lex() {
 				CS = DELIM;
 			break;
 		case IDENT:
-			//cout << "IDENT" << endl;
 			if (isalpha(c) || isdigit(c)) {
 				add();
 				getchar();
@@ -370,7 +388,6 @@ Lex Scanner::get_lex() {
 				}
 			break;
 		case NUMB:
-			//cout << "NUMB" << endl;
 			if (isdigit(c)) {
 				d = d * 10 + (c - '0');
 				getchar();
@@ -379,7 +396,6 @@ Lex Scanner::get_lex() {
 				return Lex(LEX_NUM, d);
 			break;
 		case COM:
-			//cout << "COM" << endl;
 			if (c == '}') {
 				getchar();
 				CS = H;
@@ -390,7 +406,6 @@ Lex Scanner::get_lex() {
 				getchar();
 			break;
 		case ALE:
-			//cout << "ALE" << endl;
 			if (c == '=') {
 				add();
 				getchar();
@@ -403,7 +418,6 @@ Lex Scanner::get_lex() {
 			}
 			break;
 		case NEQ:
-			//cout << "NEQ" << endl;
 			if (c == '=') {
 				add();
 				getchar();
@@ -414,7 +428,6 @@ Lex Scanner::get_lex() {
 				throw '!';
 			break;
 		case DELIM:
-			//cout << "DELIM" << endl;
 			clear();
 			add();
 			if (j = look(buf, TD)) {
@@ -426,34 +439,5 @@ Lex Scanner::get_lex() {
 			break;
 		}
 	} while (true);
-}
-
-
-
-int main(void){
-    Scanner scan("file.txt");
-    while (1){
-		try {
-			cout << scan.get_lex() << endl;
-		} catch (char c){
-			if (c == '!')
-				cout << "end" << endl;
-			break;
-		}
-	}
-		/* Печатает два числа
-			номер типа лексемы в enum type_of_lex и номер в таблице слов
-		*/
-	
-	
-	
-	
-	/*int n = TID.get_top();
-	for (int i = 0; i < n; i++){
-		Ident t = TID[i];
-		cout << t.get_value() << ' ';
-	}
-	cout << endl;*/
-    return 0;
 }
 
