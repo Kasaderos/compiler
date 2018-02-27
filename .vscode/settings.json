@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "system_error": "cpp",
+        "fstream": "cpp",
+        "type_traits": "cpp",
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "istream": "cpp",
+        "streambuf": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
