@@ -1,0 +1,90 @@
+prog        -> Dels Stmts $
+Dels        -> Del Dels | э
+Del         -> floatdcl id | intdcl id // <запомнить тип лексемы> (intdcl, floatdcl)
+Stmts       -> Stm Stmts | э
+Stmt        -> id assign Val Expr | print id // проверить что id объявлен, по Волковой
+Expr        -> plus Val Expr | minus Val Expr | э
+Val         -> id | inum | fnum
+floatdcl    -> "f"                                  // example: f a  float a
+intdcl      -> "i"
+print       -> "p"
+id          -> [a-e] | [g-h] [j-o] | [q-z]
+assign      -> "="
+plus        -> "+"
+minus       -> "-"
+inum        -> [0-9]                                // [0-9]^+
+fnum        -> [0-9].[0-9]                          // [0-9]^+
+blank       -> "_"                                  // ("_")^+
+
+Пример программы:
+
+    f a
+    i b
+    i c
+
+    a = 1.2
+    b = 0
+    c = 2
+
+    p a
+    p b
+    
+    a = b + c
+    b = a - c // b = float(a - c) ? сами решаем
+
+
+Диаграмма состояний
+
+    DC:
+        if (c == 'f' || c == 'i' || c == 'p')
+            // ключевые слова
+        else if (c == [0-9])
+            // собираем int 
+        else if (c == '.')
+            // собираем int в float
+        else if (c == ' ')
+            // строка закончена
+
+Классы:
+    Lex:
+        t_lex, val      // val - union как целое или дробное
+                        // t_lex - указатель на строку
+
+    
+    TID:
+        Ident [];
+
+    Ident:
+        name (a-z)  // в лексическом анализе, можно проверить на повторное определение 
+        dcl  (0, 1) // в лексическом анализе
+        init (0, 1)
+        val (значение  union { int, float})
+
+    // В програме сначала объявляем потом инициализироваем
+Parsing:
+    // По Волковой
+    // содержит синтаксический и семантический анализатор
+    процедура Dcls:
+        
+
+Expr -> plus <st_lex.push<c_type>
+Val < check_op() >
+Expr < check_op() >
+Val -> id < check_id() > 
+    |  inum < st_lex.push(intdcl) >
+    |  fnum < st_lex.push(floatdcl) >
+
+check_op() {
+    t_lex t1, t2, op;
+    tr = st_lex.pop()
+    op = st_lex.pop()
+    t1 = st_lex.pop()
+    if (t1 == t2) r = t1;
+    else r = floatdcl;
+    st_lex.push(r);
+}
+
+check_id() {
+    // check TID
+}
+

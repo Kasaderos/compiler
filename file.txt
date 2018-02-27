@@ -1,9 +1,6 @@
-program myprogram;
-var varuable, i : int;
-begin
-	i := 1
-	varuable := 5;
-	while (i < varuable) do 
-		i := i + 1;
-	write(i)
-end
+f a
+i b
+i c
+i d
+
+@

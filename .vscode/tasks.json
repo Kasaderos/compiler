@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ -g compiler.cpp -o compiler",
+            "command": "g++ -std=c++11 lexical.cpp compiler.cpp -o cmp",
             "group": {
                 "kind": "build",
                 "isDefault": true

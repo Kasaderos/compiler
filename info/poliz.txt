@@ -1,0 +1,22 @@
+Все перечисленные записи по ВОЛКОВОЙ 
+
+Полиз массив - prog[]
+POLIZ_ADDRESS - хранит номер строке в TID, по номеру изменить поле val
+LEX_ID - использовать для вычисление в выражениях
+
+Приоритет операции в выражениях не важен
+Операнд и операция
+
+(POLIZ_ADDRESS, v_lex)
+
+id assign Val Expr -- id Val Expr assign 
+print id -- id print
+
+Expr - plus < st_lex.push(c_type)
+    Val < check_op() > Expr | э
+
+prog.push_lex(curr_lex) -- vector (push_back)
+
+Val -> id < check_id(); prog.put.lex(c_lex) > 
+    |  inum < st_lex(intdcl); prog.put_lex(curr_lex) >
+    |  inum < st_lex(floatdcl); prog.put_lex(curr_lex) >
